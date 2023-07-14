@@ -95,9 +95,23 @@ const cors = require('cors');
 
 app.use(cors());
 
+
+
+
+/*
+
+https://github.com/segfal/youtuberooms
+
+So does the socket server look like this => 
+
+io.on("connection", function (client) {
+  console.log("We have a new client: " + client.id);
+
+*/
 // Socket.IO connection logic
 io.on('connection', (socket) => {
   // Join room
+  console.log("SOCKET",socket.id);
   socket.on('joinRoom', (room) => {
     socket.join(room);
     console.log(`User joined room: ${room}`);
@@ -105,15 +119,18 @@ io.on('connection', (socket) => {
 
   // Handle chat messages
   socket.on('chatMessage', (data) => {
+    console.log("data: ", data)
+    console.log("socket.room: ", socket.rooms)
+
     io.to(data.room).emit('message', data.message);
   });
   // Handle video controls
   socket.on('on_resume', (data) => {
     console.log("data: ", data)
-    io.to(data.room).emit('resume', data.time);
+    io.to(socket.room).emit('resume', data.time);
   });
 socket.on('on_pause', (data) => {
-    io.to(data.room).emit('pause', data.time);
+    io.to(socket.room).emit('pause', data.time);
     }
 );
 
