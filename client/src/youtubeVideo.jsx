@@ -1,24 +1,53 @@
-import React,{useState} from "react";
+import React,{useEffect, useState} from "react";
 import PropTypes from "prop-types";
 import ReactPlayer from "react-player";
-import io from 'socket.io-client';
-const socket = io('http://localhost:3001');
-const YoutubeVideo = ({ link }) =>{ 
+// import io from 'socket.io-client';
+// const socket = io('http://localhost:3001');
+const YoutubeVideo = ({ link , room, socket}) =>{ 
   const [playing, setPlaying] = useState(true);
   const pauseVideo = () => {
-    setPlaying(false);
     console.log("pause");
-    socket.emit("on_pause");
+    socket.emit("on_pause", link);
+  }
+
+  const pauseAll = () => {
+    setPlaying(false);
   }
   const resumeVideo = () => {
-    setPlaying(true);
     console.log("resume");
-    socket.emit("on_resume");
+    socket.emit("on_resume", room);
     //console log current room
 
     console.log(socket);
 
   }
+
+  const resumeAll = () => {
+    setPlaying(true)
+  }
+  useEffect(() => {
+    socket.on("on_pause", () => {
+      alert("Hello");
+    })
+    // socket.on("pause", (data) => {
+    //   console.log("Hello")
+    // })
+   
+    // console.log("USE EFFECT FIRING")
+    // socket.on("pause", (data) => {
+    //   console.log("Pausing All")
+    //   pauseAll();
+    // })
+
+    // socket.on("resume", (data) => {
+    //   console.log("Resuming All")
+    //   resumeAll();
+    // })
+
+
+  }, [])
+
+  
   
   return(
   <div className="video-responsive">

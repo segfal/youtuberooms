@@ -163,7 +163,7 @@ function App() {
       </div>
       <div>
         {messages.map((msg, index) => (
-          <YoutubeVideo link={msg}/>
+          <YoutubeVideo link={msg} room={room} socket={socket}/>
         ))}
       </div>
       <form onSubmit={handleSubmit}>
